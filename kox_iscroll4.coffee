@@ -9,7 +9,10 @@
       
   Public API, Fired Events, or Exports
     export on ko as a new binding e.g., data-bind="iscroll4: value"
-      where value = update_on: ko observableArray, parameters.. from iscroll documentation
+      where value = 
+        update_on: ko observableArray, 
+        enable_when: ko observable (true / false)
+        parameters.. from iscroll documentation
 
 
   Notes:
@@ -35,14 +38,28 @@ ko.bindingHandlers.iscroll4 =
       
     #get values and peel out the update_on
     values = ko.utils.unwrapObservable valueAccessor()
+    
+    #peel out update_on
     update_on = values.update_on ? false
     delete values.update_on
     
+    #peel out enable_when
+    enable_when = values.enable_when ? false
+    delete values.enable_when
+    
     element[has_iscroll] = new iScroll element, values
     
+    #setup subscribes
     if update_on isnt false
       update_on.subscribe (newValue) ->
         Refresh()
+    
+    if enable_when isnt false
+      enable_when.subscribe (newValue) ->
+        if newValue
+          element[has_iscroll].enable()
+        else
+          element[has_iscroll].disable()
     
     Refresh()
     

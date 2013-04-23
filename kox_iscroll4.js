@@ -10,7 +10,10 @@
       
   Public API, Fired Events, or Exports
     export on ko as a new binding e.g., data-bind="iscroll4: value"
-      where value = update_on: ko observableArray, parameters.. from iscroll documentation
+      where value = 
+        update_on: ko observableArray, 
+        enable_when: ko observable (true / false)
+        parameters.. from iscroll documentation
 
 
   Notes:
@@ -27,7 +30,7 @@
 
   ko.bindingHandlers.iscroll4 = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-      var Refresh, update_on, values, _ref;
+      var Refresh, enable_when, update_on, values, _ref, _ref1;
 
       Refresh = function() {
         return setTimeout(function() {
@@ -37,10 +40,21 @@
       values = ko.utils.unwrapObservable(valueAccessor());
       update_on = (_ref = values.update_on) != null ? _ref : false;
       delete values.update_on;
+      enable_when = (_ref1 = values.enable_when) != null ? _ref1 : false;
+      delete values.enable_when;
       element[has_iscroll] = new iScroll(element, values);
       if (update_on !== false) {
         update_on.subscribe(function(newValue) {
           return Refresh();
+        });
+      }
+      if (enable_when !== false) {
+        enable_when.subscribe(function(newValue) {
+          if (newValue) {
+            return element[has_iscroll].enable();
+          } else {
+            return element[has_iscroll].disable();
+          }
         });
       }
       return Refresh();
