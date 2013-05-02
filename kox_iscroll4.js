@@ -30,14 +30,19 @@
 
   ko.bindingHandlers.iscroll4 = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-      var Refresh, enable_when, update_on, values, _ref, _ref1;
+      var Refresh, enable_when, k, org, update_on, v, values, _ref, _ref1;
 
       Refresh = function() {
         return setTimeout(function() {
           return element[has_iscroll].refresh();
         }, 0);
       };
-      values = ko.utils.unwrapObservable(valueAccessor());
+      org = ko.utils.unwrapObservable(valueAccessor());
+      values = [];
+      for (k in org) {
+        v = org[k];
+        values[k] = org[k];
+      }
       update_on = (_ref = values.update_on) != null ? _ref : false;
       delete values.update_on;
       enable_when = (_ref1 = values.enable_when) != null ? _ref1 : false;
@@ -50,6 +55,7 @@
       }
       if (enable_when !== false) {
         enable_when.subscribe(function(newValue) {
+          console.log("scroll state:" + newValue);
           if (newValue) {
             return element[has_iscroll].enable();
           } else {

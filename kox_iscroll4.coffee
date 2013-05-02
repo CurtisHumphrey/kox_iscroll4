@@ -37,7 +37,11 @@ ko.bindingHandlers.iscroll4 =
       , 0
       
     #get values and peel out the update_on
-    values = ko.utils.unwrapObservable valueAccessor()
+    org = ko.utils.unwrapObservable valueAccessor()
+    
+    #make copy
+    values = []
+    values[k] = org[k] for k, v of org
     
     #peel out update_on
     update_on = values.update_on ? false
@@ -56,6 +60,7 @@ ko.bindingHandlers.iscroll4 =
     
     if enable_when isnt false
       enable_when.subscribe (newValue) ->
+        console.log "scroll state:" + newValue
         if newValue
           element[has_iscroll].enable()
         else

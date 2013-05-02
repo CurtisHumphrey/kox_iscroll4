@@ -763,6 +763,7 @@ iScroll.prototype = {
 			newX = (step.x - startX) * easeOut + startX;
 			newY = (step.y - startY) * easeOut + startY;
 			that._pos(newX, newY);
+			if (that.options.onScrollMove) that.options.onScrollMove.call(that, that);			// Execute custom code on movement
 			if (that.animating) that.aniTime = nextFrame(animate);
 		};
 
